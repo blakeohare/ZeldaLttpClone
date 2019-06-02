@@ -1,0 +1,13 @@
+# ID	File	[offset X]	[offset Y]
+link down 1	link_down_1.png	0	-6
+link down 2	link_down_2.png	0	-7
+link down 3	link_down_3.png	0	-7
+link up 1	link_up_1.png	0	-6
+link up 2	link_up_2.png	0	-7
+link up 3	link_up_3.png	0	-7
+link left 1	link_left_1.png	0	-6
+link left 2	link_left_2.png	0	-7
+link left 3	link_left_3.png	0	-7
+link right 1	link_right_1.png	0	-6
+link right 2	link_right_2.png	0	-7
+link right 3	link_right_3.png	0	-7

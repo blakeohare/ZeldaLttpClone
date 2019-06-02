@@ -1,0 +1,57 @@
+grass	leaves1
+grass	leaves2
+grass	leaves3
+grass	leaves4
+grass	leaves5
+grass	leaves8
+grass	leaves9
+grass	leaves12
+grass	trunk13	leaves13
+grass	trunk16	leaves16
+grass	trunk17
+grass	trunk18
+grass	trunk19
+grass	trunk20
+grass	leaves21
+grass	leaves22
+grass	leaves24
+grass	leaves25
+grass	leaves26
+grass	leaves30
+grass	leaves31
+grass	leaves35
+grass	trunk36
+grass	trunk37	leaves37
+grass	trunk38	leaves38
+grass	trunk39	leaves39
+grass	trunk40
+grass	trunk42
+grass	trunk43
+grass	trunk44
+grass	trunk18	leaves26
+grass	trunk19	leaves30
+grass	trunk17	trunk20
+grass	leaves1	leaves4_left
+leaves5	leaves8_left
+leaves9	leaves12_left
+trunk13	trunk16_left
+leaves38	leaves1	leaves4_left
+leaves39	leaves2
+leaves37	leaves3
+trunk38	leaves4
+trunk38	leaves1
+trunk43	leaves8
+trunk14	leaves21
+grass	sign1
+grass	sign2
+grass	sign3
+grass	sign4
+grass	sign5
+grass	sign6
+grass	sign7
+grass	sign8
+grass	sign9
+grass	sign10
+grass	sign11
+grass	sign12
+grass	sign13
