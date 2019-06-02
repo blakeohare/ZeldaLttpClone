@@ -11,8 +11,7 @@ class Layer {
 		this.height = height;
 	}
 
-	function IsRectangleFree(left, top, right, bottom)
-	{
+	function IsRectangleFree(left, top, right, bottom) {
 		colLeft = left >> 4;
 		colRight = right >> 4;
 		rowTop = top >> 4;

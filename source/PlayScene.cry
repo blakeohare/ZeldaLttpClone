@@ -1,7 +1,6 @@
 ﻿import Math;
 
-class PlayScene : GameSceneBase
-{
+class PlayScene : GameSceneBase {
 	field link;
 	field level;
 	field renderCounter = 0;
@@ -11,8 +10,7 @@ class PlayScene : GameSceneBase
 		TextRenderer.PurgeCache();
 	}
 
-	function GetCameraOffsetX()
-	{
+	function GetCameraOffsetX() {
 			camOffsetX = Math.floor(this.link.X - 128);
 			if (camOffsetX < 0) return 0;
 
@@ -24,8 +22,7 @@ class PlayScene : GameSceneBase
 			return camOffsetX;
 	}
 
-	function GetCameraOffsetY()
-	{
+	function GetCameraOffsetY() {
 		camOffsetY = Math.floor(this.link.Y - 112);
 		if (camOffsetY < 0) return 0;
 
@@ -96,8 +93,7 @@ class PlayScene : GameSceneBase
 
 	field canopy = new Image(256, 224);
 
-	function RenderLayer(layer)
-	{
+	function RenderLayer(layer) {
 		this.canopy.Fill(Colors.Transparent);
 
 		camOffsetX = this.GetCameraOffsetX();
@@ -121,31 +117,26 @@ class PlayScene : GameSceneBase
 		
 		canopyUsed = false;
 
-		for (row = top; row <= bottom; ++row)
-		{
-			for (col = left; col <= right; ++col)
-			{
+		for (row = top; row <= bottom; ++row) {
+			for (col = left; col <= right; ++col) {
 				x = col * 16 - camOffsetX;
 				y = row * 16 - camOffsetY;
 				tile = tiles[col][row];
 				image = tile.GetImage(this.renderCounter);
 				image.draw(x, y);
 				image = tile.GetCanopyImage(this.renderCounter);
-				if (image != null)
-				{
+				if (image != null) {
 					this.canopy.Blit(image, x, y);
 					canopyUsed = true;
 				}
 			}
 		}
 
-		if (this.link.Layer == layer)
-		{
+		if (this.link.Layer == layer) {
 			this.link.Render(screen, camOffsetX, camOffsetY);
 		}
 
-		if (canopyUsed)
-		{
+		if (canopyUsed) {
 			this.canopy.draw(0, 0);
 		}
 	}

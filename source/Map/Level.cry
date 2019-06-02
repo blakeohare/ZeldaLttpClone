@@ -1,12 +1,10 @@
 ﻿
-class Level
-{
+class Level {
 	field layers = [];
 	field width;
 	field height;
 
-	constructor(layers)
-	{
+	constructor(layers) {
 		this.layers = layers.clone();
 		this.width = this.layers[0].width;
 		this.height = this.layers[0].height;

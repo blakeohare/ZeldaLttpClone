@@ -20,12 +20,9 @@ class Link : Sprite {
 	}
 
 	function SetWalkingDirection(dx, dy) {
-		if (dx == 0 && dy == 0)
-		{
+		if (dx == 0 && dy == 0) {
 			this.state = State.Standing;
-		}
-		else
-		{
+		} else {
 			this.state = State.Walking;
 
 			// TODO: there needs to be better direction logic here

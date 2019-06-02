@@ -1,12 +1,9 @@
-﻿static class LevelStore
-{
+﻿static class LevelStore {
 	static field levels = {};
 
-	static function GetLevel(name)
-	{
+	static function GetLevel(name) {
 		level = LevelStore.levels.get(name);
-		if (level == null)
-		{
+		if (level == null) {
 			level = new ProtoLevel(name);
 			LevelStore.levels[name] = level;
 		}
