@@ -55,7 +55,7 @@ class PlayScene : GameSceneBase
 		for (e : events) {
 			if (e.Type == EventType.KeyDown) {
 				if (e.Key == Key.Enter) {
-					InventoryScreen inventory = new InventoryScreen(this);
+					inventory = new InventoryScreen(this);
 					this.SwitchToScene(inventory);
 				}
 			}
@@ -67,7 +67,8 @@ class PlayScene : GameSceneBase
 		this.link.MoveRequest();
 	}
 
-	function underlayOffset = -224;
+	field underlayOffset = -224;
+
 	function SetAsInactiveUnderlay(transitionOffset) {
 		this.underlayOffset = transitionOffset;
 	}
@@ -97,17 +98,18 @@ class PlayScene : GameSceneBase
 
 	field canopy = new Image(256, 224);
 
-	function RenderLayer(Layer layer)
+	function RenderLayer(layer)
 	{
 		this.canopy.Fill(Colors.Transparent);
 
-		int camOffsetX = this.CameraOffsetX;
-		int camOffsetY = this.CameraOffsetY;
+		camOffsetX = this.CameraOffsetX;
+		camOffsetY = this.CameraOffsetY;
 
-		int left = camOffsetX / 16;
-		int right = left + 17;
-		int top = camOffsetY / 16;
-		int bottom = top + 15;
+		left = camOffsetX / 16;
+		right = left + 17;
+		top = camOffsetY / 16;
+		bottom = top + 15;
+		
 		left--;
 		right++;
 		top--;
@@ -127,7 +129,7 @@ class PlayScene : GameSceneBase
 			{
 				x = col * 16 - camOffsetX;
 				y = row * 16 - camOffsetY;
-				tile = tiles[col, row];
+				tile = tiles[col][row];
 				image = tile.GetImage(this.renderCounter);
 				image.draw(x, y);
 				image = tile.GetCanopyImage(this.renderCounter);

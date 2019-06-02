@@ -47,10 +47,10 @@
 		switch (physics)
 		{
 			case "g":
-				return new [];
+				return [];
 
 			case "t":
-				return new [new Barrier(left, top, left + width, top + height, false, false, false, false)];
+				return [new Barrier(left, top, left + width, top + height, false, false, false, false)];
 
 			default:
 				return [];

@@ -19,8 +19,8 @@ class Layer {
 		rowBottom = bottom >> 4;
 
 		barriers = [];
-		for (int col = colLeft; col <= colRight; ++col) {
-			for (int row = rowTop; row <= rowBottom; ++row) {
+		for (col = colLeft; col <= colRight; ++col) {
+			for (row = rowTop; row <= rowBottom; ++row) {
 				if (this.tiles[col][row].IsCollisionWithRectangle(left, top, right, bottom)) {
 					return false;
 				}

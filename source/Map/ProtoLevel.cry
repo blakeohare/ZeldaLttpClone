@@ -20,7 +20,7 @@ public class ProtoLevel
 			parts = formatted.split(':');
 			if (parts.Length > 1)
 			{
-				key = parts[0][1:]
+				key = parts[0][1:];
 				if (key.length > 0) {
 					values[key] = parts[1:].join(':').trim();
 				}
