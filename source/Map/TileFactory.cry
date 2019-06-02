@@ -7,7 +7,7 @@ class TileFactory {
 	field templates = {};
 
 	static constructor() {
-		Instance = new TileFactory();
+		TileFactory.Instance = new TileFactory();
 	}
 
 	@private
@@ -34,7 +34,7 @@ class TileFactory {
 						animation.add(new Image('Images/tiles/' + id + '_anim' + i + '.png'));
 					}
 				}
-				this.templates.add(id, new TileTemplate(id, animation, physics, codes));
+				this.templates[id] = new TileTemplate(id, animation, physics, codes);
 			}
 		}
 	}

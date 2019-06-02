@@ -13,8 +13,8 @@
 	constructor(id, images, physics, specialCodes) {
 		this.ID = id;
 		this.images = images;
-		this.numImages = images.Length;
-		this.IsAnimated = this.numImages.length > 1;
+		this.numImages = images.length;
+		this.IsAnimated = this.numImages > 1;
 		this.InitializePhysics(physics);
 		this.specialCodes = {};
 		for (sc : specialCodes) { this.specialCodes[sc] = true; }

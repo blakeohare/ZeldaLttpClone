@@ -35,7 +35,7 @@ static class SpriteImageFactory {
 				width = parseInt(size[0]);
 				height = parseInt(size[1]);
 
-				if (parts.Length > 3) {
+				if (parts.length > 3) {
 					offsets = parts[3].split(',');
 					offsetX = parseInt(offsets[0]);
 					offsetY = parseInt(offsets[1]);
