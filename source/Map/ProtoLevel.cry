@@ -1,112 +1,83 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.IO;
-using GameLight.Graphics;
-using GameLight.Input;
-using GameLight.Scene;
-using GameLight.Sound;
-
-namespace Zelda.Map
+﻿
+public class ProtoLevel
 {
-	public class ProtoLevel
+	field layers = []; // each layer is a grid of tiles
+	field Width;
+	field Height;
+
+	constructor(levelName)
 	{
-		private List<List<TileTemplate[]>> layers = new List<List<TileTemplate[]>>();
-		public int Width { get; private set; }
-		public int Height { get; private set; }
+		values = {};
+		t = Resources.readTextResource("Data/Maps/" + levelName + ".txt");
+		lines = t.trim().split('\n');
 
-		public ProtoLevel(string levelName)
-		{
-			Dictionary<string, string> values = new Dictionary<string, string>();
-			StreamReader stream = new StreamReader(typeof(ProtoLevel).Assembly.GetManifestResourceStream("Zelda.Data.Maps." + levelName + ".txt"));
-			string[] lines = stream.ReadToEnd().Trim().Split('\n');
-			string value, key, formatted;
-			string[] parts;
-			int i;
-
-			foreach (string line in lines)
-			{
-				formatted = line.Trim();
-				if (!string.IsNullOrEmpty(formatted) && formatted[0] == '#')
-				{
-					parts = formatted.Split(':');
-					if (parts.Length > 1)
-					{
-						key = parts[0].Substring(1);
-						if (!string.IsNullOrEmpty(key))
-						{
-							// not using string builder as this will rarely have more than a few colons
-							value = parts[1];
-							for (i = 2; i < parts.Length; ++i)
-							{
-								value += ":" + parts[i];
-							}
-
-							values[key] = value;
-						}
-					}
-				}
+		for (line : lines) {
+			formatted = line.Trim();
+			if (formatted.length == 0 || formatted[0] == '#') {
+					continue;
 			}
-
-			this.Width = int.Parse(values["width"]);
-			this.Height = int.Parse(values["height"]);
-
-			int layerNum = 1;
-			int x, y, index;
-			int width = this.Width;
-			int height = this.Height;
-			string[] templateIds;
-			TileFactory tileFactory = TileFactory.Instance;
 			
-			while (values.ContainsKey("layer" + layerNum.ToString()))
+			parts = formatted.split(':');
+			if (parts.Length > 1)
 			{
-				List<TileTemplate[]> tiles = new List<TileTemplate[]>();
-				TileTemplate[] tile;
-				string[] tileIdClumps = values["layer" + layerNum.ToString()].Split(',');
-
-				for (y = 0; y < height; ++y)
-				{
-					for (x = 0; x < width; ++x)
-					{
-						index = y * width + x;
-						templateIds = tileIdClumps[index].Split('|');
-						tile = new TileTemplate[templateIds.Length];
-						for (i = 0; i < templateIds.Length; ++i)
-						{
-							tile[i] = tileFactory.GetTemplate(templateIds[i]);
-						}
-						tiles.Add(tile);
-					}
+				key = parts[0][1:]
+				if (key.length > 0) {
+					values[key] = parts[1:].join(':').trim();
 				}
-
-				this.layers.Add(tiles);
-
-				++layerNum;
 			}
 		}
 
-		public Level GenerateNewLevel()
+		this.Width = parseInt(values["width"]);
+		this.Height = parseInt(values["height"]);
+
+		layerNum = 1;
+		width = this.Width;
+		height = this.Height;
+		tileFactory = TileFactory.Instance;
+		
+		while (values.get("layer" + layerNum) != null)
 		{
-			List<Layer> layers = new List<Layer>();
-			foreach (List<TileTemplate[]> protoLayer in this.layers)
-			{
-				Tile[,] tiles = new Tile[this.Width, this.Height];
-				int x, y, index;
-				int width = this.Width;
-				int height = this.Height;
+			tiles = [];
+			tileIdClumps = values["layer" + layerNum].split(',');
 
-				for (y = 0; y < height; ++y)
+			for (y = 0; y < height; ++y)
+			{
+				for (x = 0; x < width; ++x)
 				{
-					for (x = 0; x < width; ++x)
+					index = y * width + x;
+					templateIds = tileIdClumps[index].split('|');
+					// TODO: C#-ism
+					tile = [null] * templateIds.Length;
+					for (i = 0; i < templateIds.Length; ++i)
 					{
-						index = y * width + x;
-						tiles[x, y] = new Tile(x, y, protoLayer[index]);
+						tile[i] = tileFactory.GetTemplate(templateIds[i]);
 					}
+					tiles.add(tile);
 				}
-				layers.Add(new Layer(this.Width, this.Height, tiles));
 			}
 
-			return new Level(layers);
+			this.layers.Add(tiles);
+
+			++layerNum;
 		}
+	}
+
+	function GenerateNewLevel() {
+		layers = [];
+		for (protoLayer : this.layers) {
+			tiles = makeGrid(this.Width, this.Height);
+			width = this.Width;
+			height = this.Height;
+
+			for (y = 0; y < height; ++y) {
+				for (x = 0; x < width; ++x) {
+					index = y * width + x;
+					tiles[x][y] = new Tile(x, y, protoLayer[index]);
+				}
+			}
+			layers.add(new Layer(this.Width, this.Height, tiles));
+		}
+
+		return new Level(layers);
 	}
 }

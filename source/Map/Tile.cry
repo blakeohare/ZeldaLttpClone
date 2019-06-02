@@ -1,155 +1,126 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using GameLight.Graphics;
-using GameLight.Input;
-using GameLight.Scene;
-using GameLight.Sound;
-
-namespace Zelda.Map
+﻿
+class Tile
 {
-	public class Tile
+	field templates = new List<TileTemplate>();
+
+	field barriers = null; // Barrier[], lazily initialized
+	field empty; // bool
+	field animated; // bool
+	flattenedImage = new Image(16, 16);
+	field col; // int
+	field row; // int
+	field physics; // PhysicsTypes[]
+
+	constructor(col, row, templates) {
+		this.col = col;
+		this.row = row;
+		this.Initialize(templates);
+	}
+
+	function InitializeBarriers() {
+		this.barriers = [];
+		for (template : this.templates) {
+			for (barrier : template.Barriers) {
+				this.barriers.add(barrier.Clone(this.col, this.row));
+			}
+		}
+	}
+	
+	function IsCollisionWithRectangle(left, top, right, bottom)
 	{
-		private List<TileTemplate> templates = new List<TileTemplate>();
+		if (this.barriers == null) this.InitializeBarriers();
 
-		private Barrier[] barriers = null;
-		private bool empty;
-		private bool animated;
-		private Image flattenedImage = new Image(16, 16);
-		private int col;
-		private int row;
-		private PhysicsTypes[] physics;
-
-		public Tile(int col, int row, TileTemplate[] templates)
+		for (barrier : this.barriers)
 		{
-			this.col = col;
-			this.row = row;
-			this.Initialize(templates);
+			if (barrier.IntersectsRectangle(left, top, right, bottom))
+			{
+				return true;
+			}
+		}
+		return false;
+	}
+
+	function Initialize(templates)
+	{
+		this.physics = [PhysicsTypes.Ground, PhysicsTypes.Ground, PhysicsTypes.Ground, PhysicsTypes.Ground ];
+
+		animated = false;
+		for (template : templates) {
+			this.templates.add(template);
+			animated = animated || template.IsAnimated;
+			this.hasCanopy = this.hasCanopy || template.IsCanopy;
 		}
 
-		public void InitializeBarriers()
-		{
-			List<Barrier> barriers = new List<Barrier>();
-			foreach (TileTemplate template in this.templates)
-			{
-				foreach (Barrier barrier in template.Barriers)
-				{
-					barriers.Add(barrier.Clone(this.col, this.row));
-				}
-			}
-			this.barriers = barriers.ToArray();
+		this.empty = this.templates.Count == 0;
+		if (!this.empty) {
+			this.flattenedImage = new Image(16, 16);
 		}
-		
-		public bool IsCollisionWithRectangle(int left, int top, int right, int bottom)
+		this.animated = animated;
+		if (!this.animated)
 		{
-			if (this.barriers == null) this.InitializeBarriers();
-			foreach (Barrier barrier in this.barriers)
+			for (TileTemplate template : this.templates)
 			{
-				if (barrier.IntersectsRectangle(left, top, right, bottom))
-				{
-					return true;
-				}
+				this.flattenedImage.Blit(template.GetImage(0), 0, 0);
 			}
-			return false;
 		}
+	}
 
-		private void Initialize(TileTemplate[] templates)
+	function GetImage(renderCounter)
+	{
+		if (this.animated)
 		{
-			this.physics = new PhysicsTypes[] { PhysicsTypes.Ground, PhysicsTypes.Ground, PhysicsTypes.Ground, PhysicsTypes.Ground };
-
-			bool animated = false;
-			foreach (TileTemplate template in templates)
+			for (template : this.templates)
 			{
-				if (template == null) break;
-
-				this.templates.Add(template);
-				animated = animated || template.IsAnimated;
-				this.hasCanopy = this.hasCanopy || template.IsCanopy;
-			}
-
-			this.empty = this.templates.Count == 0;
-			if (!this.empty)
-			{
-				this.flattenedImage = new Image(16, 16);
-			}
-			this.animated = animated;
-			if (!this.animated)
-			{
-				foreach (TileTemplate template in this.templates)
-				{
-					this.flattenedImage.Blit(template.GetImage(0), 0, 0);
-				}
+				this.flattenedImage.Blit(template.GetImage(renderCounter), 0, 0);
 			}
 		}
 
-		public Image GetImage(int renderCounter)
-		{
-			if (this.animated)
-			{
-				foreach (TileTemplate template in this.templates)
-				{
-					this.flattenedImage.Blit(template.GetImage(renderCounter), 0, 0);
-				}
-			}
+		return this.flattenedImage;
+	}
 
-			return this.flattenedImage;
-		}
+	field canopyImage = null; // Image
+	field hasCanopy = false; // bool
 
-		private Image canopyImage = null;
-		private bool hasCanopy = false;
-
-		// TODO: will the canopy ever be animated?
-		// if so, this should probably cache just the canopy templates instead and then
-		// return the image as a function of those per renderCounter
-		public Image GetCanopyImage(int renderCounter)
-		{
-			if (this.hasCanopy)
-			{
-				if (this.canopyImage == null)
-				{
-					this.canopyImage = new Image(16, 16);
-					foreach (TileTemplate template in this.templates)
-					{
-						if (template.IsCanopy)
-						{
-							this.canopyImage.Blit(template.GetImage(renderCounter), 0, 0);
-						}
+	// TODO: will the canopy ever be animated?
+	// if so, this should probably cache just the canopy templates instead and then
+	// return the image as a function of those per renderCounter
+	function GetCanopyImage(renderCounter) {
+		if (this.hasCanopy) {
+			if (this.canopyImage == null) {
+				this.canopyImage = new Image(16, 16);
+				for (template : this.templates) {
+					if (template.IsCanopy) {
+						this.canopyImage.Blit(template.GetImage(renderCounter), 0, 0);
 					}
 				}
-				return this.canopyImage;
 			}
-			return null;
+			return this.canopyImage;
 		}
+		return null;
+	}
 
-		public string[] ReplaceTemplateWithCode(string code, string newTemplateId)
-		{
-			List<string> newTemplates = new List<string>();
+	// returns string[]
+	function ReplaceTemplateWithCode(code, newTemplateId) {
+		newTemplates = [];
 
-			bool found = false;
-			foreach (TileTemplate template in this.templates)
-			{
-				if (template.ContainsSpecialTile(code))
-				{
-					found = true;
-					if (newTemplateId != null)
-					{
-						newTemplates.Add(newTemplateId);
-					}
+		found = false;
+		for (template : this.templates) {
+			if (template.ContainsSpecialTile(code)) {
+				found = true;
+				if (newTemplateId != null) {
+					newTemplates.add(newTemplateId);
 				}
-				else
-				{
-					newTemplates.Add(template.ID);
-				}
+			} else {
+				newTemplates.add(template.ID);
 			}
-
-			return found
-				? newTemplates.ToArray()
-				: null;
 		}
 
-		public string[] RemoveTemplateWithCode(string code)
-		{
-			return this.ReplaceTemplateWithCode(code, null);
-		}
+		return found
+			? newTemplates
+			: null;
+	}
+
+	function RemoveTemplateWithCode(code) {
+		return this.ReplaceTemplateWithCode(code, null);
 	}
 }

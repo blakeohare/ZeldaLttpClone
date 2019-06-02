@@ -1,26 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using GameLight.Graphics;
-using GameLight.Input;
-using GameLight.Scene;
-using GameLight.Sound;
-
-namespace Zelda.Map
+﻿static class LevelStore
 {
-	public static class LevelStore
-	{
-		private static Dictionary<string, ProtoLevel> levels = new Dictionary<string, ProtoLevel>();
+	static field levels = {};
 
-		public static Level GetLevel(string name)
+	static function GetLevel(name)
+	{
+		level = levelts.get(name);
+		if (level == null)
 		{
-			ProtoLevel level;
-			if (!levels.TryGetValue(name, out level))
-			{
-				level = new ProtoLevel(name);
-				levels.Add(name, level);
-			}
-			return level.GenerateNewLevel();
+			level = new ProtoLevel(name);
+			levels[name] = level;
 		}
+		return level.GenerateNewLevel();
 	}
 }
