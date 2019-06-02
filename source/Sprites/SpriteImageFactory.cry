@@ -17,7 +17,7 @@ class SpriteImageFactory {
 	field images = {};
 
 	static constructor() {
-		string[] lines = Resources.readTextResource("Data/sprite_manifest.txt").split('\n');
+		lines = Resources.readTextResource("Data/sprite_manifest.txt").split('\n');
 		// TODO: C#-ism: this is an atlas
 		canvas = new Image("Images/sprites.png");
 		sprite = null;

@@ -1,8 +1,7 @@
-﻿static class TextRenderer
-{
+﻿static class TextRenderer {
 	static field overlayNumbers = {};
 
-	static cache = {};
+	static field cache = {};
 
 	static constructor()
 	{
@@ -13,7 +12,7 @@
 	}
 
 	// TODO: C#-ism: Replace the calling site with a simple call to draw directly to the canvas.
-	static function GetOverlayNumber(int number, int digits)
+	static function GetOverlayNumber(number, digits)
 	{
 		key = "o_" + number + "_" + digits;
 		output = TextRenderer.cache.get(key);
@@ -39,8 +38,8 @@
 		return output;
 	}
 
-	public static void PurgeCache()
+	static function PurgeCache()
 	{
-		cache.clear();
+		TextRenderer.cache.clear();
 	}
 }

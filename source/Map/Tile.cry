@@ -1,12 +1,12 @@
 ﻿
 class Tile
 {
-	field templates = new List<TileTemplate>();
+	field templates = []; // List<TileTemplate>
 
 	field barriers = null; // Barrier[], lazily initialized
 	field empty; // bool
 	field animated; // bool
-	flattenedImage = new Image(16, 16);
+	field flattenedImage = new Image(16, 16);
 	field col; // int
 	field row; // int
 	field physics; // PhysicsTypes[]
@@ -58,7 +58,7 @@ class Tile
 		this.animated = animated;
 		if (!this.animated)
 		{
-			for (TileTemplate template : this.templates)
+			for (template : this.templates)
 			{
 				this.flattenedImage.Blit(template.GetImage(0), 0, 0);
 			}
