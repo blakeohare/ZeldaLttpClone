@@ -39,7 +39,7 @@ class Link : Sprite {
 		this.DY = dy;
 	}
 
-	function Render(screen, cameraOffsetX, cameraOffsetY) {
+	function Render(cameraOffsetX, cameraOffsetY) {
 		sid = null; // sprite image data
 		++this.renderCounter;
 

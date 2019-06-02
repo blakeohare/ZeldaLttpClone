@@ -68,16 +68,16 @@ class PlayScene : GameSceneBase {
 		this.underlayOffset = transitionOffset;
 	}
 
-	function Render(gameScreen) {
+	function Render() {
 		// TODO: render other layers
-		this.RenderLayer(this.level.Layers[0], gameScreen);
-		this.RenderOverlay(gameScreen);
+		this.RenderLayer(this.level.Layers[0]);
+		this.RenderOverlay();
 
 		++this.renderCounter;
 	}
 
-	field overlayBaseImage = new Image("Images/overlay.png");
-	field overlayAggregated = null;
+	field overlayBase = new Image("Images/overlay.png");
+	
 	function RenderOverlay() {
 
 		top = 224 + this.underlayOffset;
@@ -91,10 +91,10 @@ class PlayScene : GameSceneBase {
 		arrowCount.draw(121, 24 + top);
 	}
 
-	field canopy = new Image(256, 224);
+	field canopy = new AggregatedImage(256, 224);
 
 	function RenderLayer(layer) {
-		this.canopy.Fill(Colors.Transparent);
+		this.canopy.clear();
 
 		camOffsetX = this.GetCameraOffsetX();
 		camOffsetY = this.GetCameraOffsetY();
@@ -133,7 +133,7 @@ class PlayScene : GameSceneBase {
 		}
 
 		if (this.link.Layer == layer) {
-			this.link.Render(screen, camOffsetX, camOffsetY);
+			this.link.Render(camOffsetX, camOffsetY);
 		}
 
 		if (canopyUsed) {
