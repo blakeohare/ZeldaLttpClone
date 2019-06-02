@@ -1,57 +1,46 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using GameLight.Graphics;
-using GameLight.Input;
-using GameLight.Scene;
-using GameLight.Sound;
-
-namespace Zelda
+﻿static class TextRenderer
 {
-	public static class TextRenderer
+	static field overlayNumbers = {};
+
+	static cache = {};
+
+	static constructor()
 	{
-		private static Dictionary<string, Image> overlayNumbers = new Dictionary<string, Image>();
-
-		private static Dictionary<string, Image> cache = new Dictionary<string, Image>();
-
-		static TextRenderer()
+		for (i = 0; i < 10; ++i)
 		{
-			for (int i = 0; i < 10; ++i)
-			{
-				overlayNumbers[i.ToString()] = new Image("Images/Text/Overlay/" + i.ToString() + ".png");
+			overlayNumbers[i.ToString()] = new Image("Images/Text/Overlay/" + i.ToString() + ".png");
+		}
+	}
+
+	// TODO: C#-ism: Replace the calling site with a simple call to draw directly to the canvas.
+	static function GetOverlayNumber(int number, int digits)
+	{
+		key = "o_" + number + "_" + digits;
+		output = TextRenderer.cache.get(key);
+		if (output == null)
+		{
+			digitWidth = overlayNumbers["0"].Width + 1;
+			width = digitWidth * digits;
+			height = overlayNumbers["0"].Height;
+			numAsString = "" + number;
+			output = new Image(width, height);
+
+			while (numAsString.length < digits) {
+				numAsString = "0" + numAsString;
 			}
-		}
 
-		public static Image GetOverlayNumber(int number, int digits)
-		{
-			string key = "o_" + number.ToString() + "_" + digits.ToString();
-			Image output;
-			if (!cache.TryGetValue(key, out output))
+			for (i = 0; i < numAsString.length; ++i)
 			{
-				int digitWidth = overlayNumbers["0"].Width + 1;
-				int width = digitWidth * digits;
-				int height = overlayNumbers["0"].Height;
-				string numAsString = number.ToString();
-				output = new Image(width, height);
-
-				while (numAsString.Length < digits)
-				{
-					numAsString = "0" + numAsString;
-				}
-
-				for (int i = 0; i < numAsString.Length; ++i)
-				{
-					output.Blit(overlayNumbers[numAsString[i].ToString()], i * digitWidth, 0);
-				}
-
-				cache[key] = output;
+				output.Blit(overlayNumbers[numAsString[i].ToString()], i * digitWidth, 0);
 			}
-			return output;
-		}
 
-		public static void PurgeCache()
-		{
-			cache.Clear();
+			cache[key] = output;
 		}
+		return output;
+	}
+
+	public static void PurgeCache()
+	{
+		cache.clear();
 	}
 }

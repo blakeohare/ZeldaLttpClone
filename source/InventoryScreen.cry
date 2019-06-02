@@ -1,84 +1,68 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using GameLight.Graphics;
-using GameLight.Input;
-using GameLight.Scene;
-using GameLight.Sound;
+﻿import Math;
 
-namespace Zelda
+enum InventoryTransitionState
 {
-	public class InventoryScreen : GameSceneBase
-	{
-		private enum State
-		{
-			TransitionIn,
-			TransitionOut,
-			Normal
-		}
-		private const int deploySpeed = 6;
-		private static readonly Image frame = new Image("Images/inventory.png");
+	TransitionIn,
+	TransitionOut,
+	Normal
+}
 
-		private PlayScene underlay;
-		private State transitionState = State.TransitionIn;
-		private int transitionCounter = -224;
-		
-		public InventoryScreen(PlayScene underlay)
-		{
-			this.underlay = underlay;
-		}
+const INVENTORY_DEPLOY_SPEED = 6;
 
-		protected override void Initialize()
-		{
-			
-		}
+class InventoryScreen : GameSceneBase {
+	static field frame = new Image("Images/inventory.png");
 
-		protected override void ProcessInput(InputEvent[] events)
-		{
-			foreach (InputEvent e in events)
-			{
-				if (e.Type == EventType.KeyDown)
-				{
-					if (e.Key == Key.Enter)
-					{
-						this.transitionState = State.TransitionOut;
-					}
+	field underlay;
+	field transitionState = InventoryTransitionState.TransitionIn;
+	field transitionCounter = -224;
+	
+	constructor(underlay) {
+		this.underlay = underlay;
+	}
+
+	function Initialize() {}
+
+	// This is an InputEvent[] from GameLight
+	function ProcessInput(events) {
+		for (e : events) {
+			if (e.Type == EventType.KeyDown) {
+				if (e.Key == Key.Enter) {
+					this.transitionState = InventoryTransitionState.TransitionOut;
 				}
 			}
 		}
+	}
 
-		protected override void Render(Image gameScreen)
+	function Render(gameScreen) {
+		this.underlay.PublicRender(gameScreen);
+		frame.draw(0, this.transitionCounter);
+	}
+
+	function Update(gameCounter)
+	{
+		switch (this.transitionState)
 		{
-			this.underlay.PublicRender(gameScreen);
-			gameScreen.Blit(frame, 0, this.transitionCounter);
+			case InventoryTransitionState.Normal:
+				this.transitionCounter = 0;
+				break;
+
+			case InventoryTransitionState.TransitionIn:
+				this.transitionCounter = Math.min(0, this.transitionCounter + INVENTORY_DEPLOY_SPEED);
+				if (this.transitionCounter == 0)
+				{
+					this.transitionState = InventoryTransitionState.Normal;
+				}
+				break;
+
+			case InventoryTransitionState.TransitionOut:
+				this.transitionCounter = Math.max(-224, this.transitionCounter - INVENTORY_DEPLOY_SPEED);
+				if (this.transitionCounter == -224)
+				{
+					this.SwitchToScene(this.underlay);
+				}
+				break;
 		}
 
-		protected override void Update(int gameCounter)
-		{
-			switch (this.transitionState)
-			{
-				case State.Normal:
-					this.transitionCounter = 0;
-					break;
-
-				case State.TransitionIn:
-					this.transitionCounter = System.Math.Min(0, this.transitionCounter + deploySpeed);
-					if (this.transitionCounter == 0)
-					{
-						this.transitionState = State.Normal;
-					}
-					break;
-
-				case State.TransitionOut:
-					this.transitionCounter = System.Math.Max(-224, this.transitionCounter - deploySpeed);
-					if (this.transitionCounter == -224)
-					{
-						this.SwitchToScene(this.underlay);
-					}
-					break;
-			}
-
-			this.underlay.SetAsInactiveUnderlay(this.transitionCounter);
-		}
+		this.underlay.SetAsInactiveUnderlay(this.transitionCounter);
 	}
 }

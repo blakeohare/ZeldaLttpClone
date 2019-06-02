@@ -1,174 +1,152 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using GameLight.Graphics;
-using GameLight.Input;
-using GameLight.Scene;
-using GameLight.Sound;
-using Zelda.Map;
+﻿import Math;
 
-namespace Zelda
+class PlayScene : GameSceneBase
 {
-	public class PlayScene : GameSceneBase
+	field link;
+	field level;
+	field renderCounter = 0;
+
+	constructor(level) {
+		this.level = level;
+		TextRenderer.PurgeCache();
+	}
+
+	function GetCameraOffsetX()
 	{
-		private Sprites.Link link;
-		private Level level;
-		private int renderCounter = 0;
+			camOffsetX = Math.floor(this.link.X - 128);
+			if (camOffsetX < 0) return 0;
 
-		public PlayScene(Level level)
-		{
-			this.level = level;
-			TextRenderer.PurgeCache();
-		}
-
-		private int CameraOffsetX
-		{
-			get
-			{
-				int camOffsetX = (int)(this.link.X - 128);
-				if (camOffsetX < 0) return 0;
-				if (camOffsetX >= this.level.Width * 16 - 256) return this.level.Width * 16 - 256; // Is this off by 1? Go to the right edge of the map to find out.
-				return camOffsetX;
+			// Is this off by 1? Go to the right edge of the map to find out.
+			if (camOffsetX >= this.level.Width * 16 - 256) {
+				return this.level.Width * 16 - 256;
 			}
-		}
-
-		private int CameraOffsetY
-		{
-			get
-			{
-				int camOffsetY = (int)(this.link.Y - 112);
-				if (camOffsetY < 0) return 0;
-				if (camOffsetY >= this.level.Height * 16 - 224) return this.level.Width * 16 - 224; // Is this off by 1? Go to the right edge of the map to find out.
-				return camOffsetY;
-			}
-		}
-
-		protected override void Initialize()
-		{
-			this.link = new Sprites.Link(1288, 220, this.level, this.level.Layers[0]);
-		}
-
-		protected override void ProcessInput(InputEvent[] events)
-		{
-			double dx = 0;
-			double dy = 0;
-
-			if (InputManager.IsKeyPressed(Key.Up)) dy = -1;
-			if (InputManager.IsKeyPressed(Key.Down)) dy = 1;
-			if (InputManager.IsKeyPressed(Key.Right)) dx = 1;
-			if (InputManager.IsKeyPressed(Key.Left)) dx = -1;
-
-			this.link.SetWalkingDirection(dx * 1.7, dy * 1.7);
-
-			foreach (InputEvent e in events)
-			{
-				if (e.Type == EventType.KeyDown)
-				{
-					if (e.Key == Key.Enter)
-					{
-						InventoryScreen inventory = new InventoryScreen(this);
-						this.SwitchToScene(inventory);
-					}
-				}
-			}
-		}
-
-		protected override void Update(int gameCounter)
-		{
-			this.link.Update();
-			this.link.MoveRequest();
-		}
-
-
-		private int underlayOffset = -224;
-		public void SetAsInactiveUnderlay(int transitionOffset)
-		{
-			this.underlayOffset = transitionOffset;
-		}
-
-		public void PublicRender(Image gameScreen) { this.Render(gameScreen); }
-
-		protected override void Render(Image gameScreen)
-		{
-			// TODO: render other layers
-			this.RenderLayer(this.level.Layers[0], gameScreen);
-			this.RenderOverlay(gameScreen);
-
-			++this.renderCounter;
-		}
-
-		private Image overlayBase = new Image("Images/overlay.png");
-		private void RenderOverlay(Image screen)
-		{
-			int top = 224 + this.underlayOffset;
-			screen.Blit(overlayBase, 12, top);
-			Image rupeeCount = TextRenderer.GetOverlayNumber(GameState.Instance.Rupees, 3);
-			Image bombCount = TextRenderer.GetOverlayNumber(GameState.Instance.Bombs, 2);
-			Image arrowCount = TextRenderer.GetOverlayNumber(GameState.Instance.Arrows, 2);
 			
-			screen.Blit(rupeeCount, 65, 24 + top);
-			screen.Blit(bombCount, 97, 24 + top);
-			screen.Blit(arrowCount, 121, 24 + top);
+			return camOffsetX;
+	}
+
+	function CameraOffsetY()
+	{
+		camOffsetY = Math.floor(this.link.Y - 112);
+		if (camOffsetY < 0) return 0;
+
+		// Is this off by 1? Go to the bottom edge of the map to find out.
+		if (camOffsetY >= this.level.Height * 16 - 224) {
+			return this.level.Width * 16 - 224;
 		}
 
-		private Image canopy = new Image(256, 224);
+		return camOffsetY;
+	}
 
-		private void RenderLayer(Layer layer, Image screen)
-		{
-			this.canopy.Fill(Colors.Transparent);
+	function Initialize() {
+		this.link = new Link(1288, 220, this.level, this.level.Layers[0]);
+	}
 
-			int camOffsetX = this.CameraOffsetX;
-			int camOffsetY = this.CameraOffsetY;
+	function ProcessInput(events) {
+		dx = 0.0;
+		dy = 0.0;
 
-			int left = camOffsetX / 16;
-			int right = left + 17;
-			int top = camOffsetY / 16;
-			int bottom = top + 15;
-			left--;
-			right++;
-			top--;
-			bottom++;
+		if (InputManager.IsKeyPressed(Key.Up)) dy = -1;
+		if (InputManager.IsKeyPressed(Key.Down)) dy = 1;
+		if (InputManager.IsKeyPressed(Key.Right)) dx = 1;
+		if (InputManager.IsKeyPressed(Key.Left)) dx = -1;
 
-			left = left < 0 ? 0 : left;
-			right = right >= this.level.Width ? this.level.Width - 1 : right;
-			top = top < 0 ? 0 : top;
-			bottom = bottom >= this.level.Height ? this.level.Height - 1 : bottom;
+		this.link.SetWalkingDirection(dx * 1.7, dy * 1.7);
 
-			int row, col;
-
-			Tile[,] tiles = layer.Tiles;
-			Image image;
-			Tile tile;
-			int x, y;
-			bool canopyUsed = false;
-
-			for (row = top; row <= bottom; ++row)
-			{
-				for (col = left; col <= right; ++col)
-				{
-					x = col * 16 - camOffsetX;
-					y = row * 16 - camOffsetY;
-					tile = tiles[col, row];
-					image = tile.GetImage(this.renderCounter);
-					screen.Blit(image, x, y);
-					image = tile.GetCanopyImage(this.renderCounter);
-					if (image != null)
-					{
-						this.canopy.Blit(image, x, y);
-						canopyUsed = true;
-					}
+		for (e : events) {
+			if (e.Type == EventType.KeyDown) {
+				if (e.Key == Key.Enter) {
+					InventoryScreen inventory = new InventoryScreen(this);
+					this.SwitchToScene(inventory);
 				}
 			}
+		}
+	}
 
-			if (this.link.Layer == layer)
-			{
-				this.link.Render(screen, camOffsetX, camOffsetY);
-			}
+	function Update(gameCounter) {
+		this.link.Update();
+		this.link.MoveRequest();
+	}
 
-			if (canopyUsed)
+	function underlayOffset = -224;
+	function SetAsInactiveUnderlay(transitionOffset) {
+		this.underlayOffset = transitionOffset;
+	}
+
+	function PublicRender(gameScreen) { this.Render(gameScreen); }
+
+	function Render(gameScreen) {
+		// TODO: render other layers
+		this.RenderLayer(this.level.Layers[0], gameScreen);
+		this.RenderOverlay(gameScreen);
+
+		++this.renderCounter;
+	}
+
+	field overlayBase = new Image("Images/overlay.png");
+	function RenderOverlay() {
+		top = 224 + this.underlayOffset;
+		overlayBase.draw(12, top);
+		rupeeCount = TextRenderer.GetOverlayNumber(GameState.Instance.Rupees, 3);
+		bombCount = TextRenderer.GetOverlayNumber(GameState.Instance.Bombs, 2);
+		arrowCount = TextRenderer.GetOverlayNumber(GameState.Instance.Arrows, 2);
+		
+		rupeeCount.draw(65, 24 + top);
+		bombCount.draw(97, 24 + top);
+		arrowCount.draw(121, 24 + top);
+	}
+
+	field canopy = new Image(256, 224);
+
+	function RenderLayer(Layer layer)
+	{
+		this.canopy.Fill(Colors.Transparent);
+
+		int camOffsetX = this.CameraOffsetX;
+		int camOffsetY = this.CameraOffsetY;
+
+		int left = camOffsetX / 16;
+		int right = left + 17;
+		int top = camOffsetY / 16;
+		int bottom = top + 15;
+		left--;
+		right++;
+		top--;
+		bottom++;
+
+		left = left < 0 ? 0 : left;
+		right = right >= this.level.Width ? this.level.Width - 1 : right;
+		top = top < 0 ? 0 : top;
+		bottom = bottom >= this.level.Height ? this.level.Height - 1 : bottom;
+		tiles = layer.Tiles;
+		
+		canopyUsed = false;
+
+		for (row = top; row <= bottom; ++row)
+		{
+			for (col = left; col <= right; ++col)
 			{
-				screen.Blit(this.canopy, 0, 0);
+				x = col * 16 - camOffsetX;
+				y = row * 16 - camOffsetY;
+				tile = tiles[col, row];
+				image = tile.GetImage(this.renderCounter);
+				image.draw(x, y);
+				image = tile.GetCanopyImage(this.renderCounter);
+				if (image != null)
+				{
+					this.canopy.Blit(image, x, y);
+					canopyUsed = true;
+				}
 			}
+		}
+
+		if (this.link.Layer == layer)
+		{
+			this.link.Render(screen, camOffsetX, camOffsetY);
+		}
+
+		if (canopyUsed)
+		{
+			this.canopy.draw(0, 0);
 		}
 	}
 }

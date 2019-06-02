@@ -1,15 +1,4 @@
-﻿// TODO: put this in a separate file
-class Point {
-	field X;
-	field Y;
-	constructor(x, y) {
-		this.X = x;
-		this.Y = y;
-	}
-}
-
-// abstract
-class Sprite
+﻿class Sprite // abstract
 {
 	// doubles
 	field X;
