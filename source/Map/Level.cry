@@ -1,5 +1,4 @@
-﻿
-class Level {
+﻿class Level {
 	field layers = [];
 	field width;
 	field height;
