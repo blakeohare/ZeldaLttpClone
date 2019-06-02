@@ -1,0 +1,9 @@
+function makeGrid(width, height) {
+
+	output = [];
+	t = [null];
+	while (width --> 0) {
+		output.add(t * height);
+	}
+	return output;
+}

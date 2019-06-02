@@ -1,0 +1,18 @@
+class GameSceneBase {
+
+	field _nextScene;
+	
+	constructor() { }
+
+	function ProcessInput(events) { throw new NotImplementedException(); }
+	function Update(counter) { throw new NotImplementedException(); }
+	function Render() { throw new NotImplementedException(); }
+
+	function SwitchToScene(scene) {
+		if (scene is GameSceneBase) {
+			this._nextScene = scene;
+		} else {
+			throw new InvalidArgumentException();
+		}
+	}
+}

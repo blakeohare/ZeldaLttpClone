@@ -68,7 +68,7 @@
 			physicses = physics.split(',');
 			for (i = 0; i < 4; ++i) {
 				tempPhysics = physicses[i];
-				tempBarrierList = this.GetBarrierList(tempPhysics, leftList[i], topList[i], 8, 8);
+				tempBarrierList = this.GetBarrierList(tempPhysics, this.leftList[i], this.topList[i], 8, 8);
 				barriers.concat(tempBarrierList);
 				if (tempPhysics == "t") {
 					tallBarriers.concat(tempBarrierList);
@@ -87,7 +87,7 @@
 	}
 
 	function GetImage(renderCounter) {
-		return images[(renderCounter / 10) % numImages];
+		return this.images[(renderCounter / 10) % this.numImages];
 	}
 
 	// Special codes are used for identifying tile templates as having 

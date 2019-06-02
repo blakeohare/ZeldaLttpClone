@@ -1,4 +1,6 @@
-﻿class Sprite // abstract
+﻿import Math;
+
+class Sprite // abstract
 {
 	// doubles
 	field X;
@@ -21,7 +23,7 @@
 	function GetRenderLeft() { return Math.floor(this.X + this.renderOffset.X); }
 	function GetRenderTop() { return Math.floor(this.Y + this.renderOffset.Y); }
 	function GetWidth() { return Math.floor(this.CollisionRadius * 2); }
-	function GetHeight() { return (int)(this.CollisionRadius * 2); }
+	function GetHeight() { return Math.floor(this.CollisionRadius * 2); }
 
 	field level;
 	field layer;
@@ -45,10 +47,10 @@
 		x = this.X + this.DX;
 		y = this.Y + this.DY;
 
-		left = (int)(x - this.CollisionRadius);
-		top = (int)(y - this.CollisionRadius);
-		right = left + (int)(this.CollisionRadius * 2);
-		bottom = top + (int)(this.CollisionRadius * 2);
+		left = Math.floor(x - this.CollisionRadius);
+		top = Math.floor(y - this.CollisionRadius);
+		right = left + Math.floor(this.CollisionRadius * 2);
+		bottom = top + Math.floor(this.CollisionRadius * 2);
 
 		if (this.layer.IsRectangleFree(left, top, right, bottom)) {
 			this.X = x;

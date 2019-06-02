@@ -4,11 +4,11 @@
 
 	static function GetLevel(name)
 	{
-		level = levelts.get(name);
+		level = LevelStore.levels.get(name);
 		if (level == null)
 		{
 			level = new ProtoLevel(name);
-			levels[name] = level;
+			LevelStore.levels[name] = level;
 		}
 		return level.GenerateNewLevel();
 	}

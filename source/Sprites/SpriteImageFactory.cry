@@ -1,6 +1,7 @@
-﻿// TODO: put this in a separate file
-class SpriteImageData
-{
+﻿import Resources;
+
+// TODO: put this in a separate file
+class SpriteImageData {
 	field Image;
 	field OffsetX;
 	field OffsetY;
@@ -12,12 +13,12 @@ class SpriteImageData
 	}
 }
 
-class SpriteImageFactory {
+static class SpriteImageFactory {
 	// Dictionary<string, SpriteImageData>
-	field images = {};
+	static field images = {};
 
 	static constructor() {
-		lines = Resources.readTextResource("Data/sprite_manifest.txt").split('\n');
+		lines = Resources.readText("Data/sprite_manifest.txt").split('\n');
 		// TODO: C#-ism: this is an atlas
 		canvas = new Image("Images/sprites.png");
 		sprite = null;
@@ -45,14 +46,13 @@ class SpriteImageFactory {
 
 				sprite = new Image(width, height);
 				sprite.Blit(canvas, -locX, -locY);
-				images.add(id, new SpriteImageData(sprite, offsetX, offsetY));
+				SpriteImageFactory.images.add(id, new SpriteImageData(sprite, offsetX, offsetY));
 			}
 		}
 	}
 
-	function GetImage(id)
-	{
-		img = images.get(id);
+	static function GetImage(id) {
+		img = SpriteImageFactory.images.get(id);
 		if (img != null) return img;
 		throw new InvalidArgumentException("Image not found: " + id);
 	}

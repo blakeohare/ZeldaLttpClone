@@ -1,4 +1,6 @@
-﻿/*
+﻿import Game;
+
+/*
 	TODO list:
 	diagonal and corner forgiveness
 	ladders
@@ -23,6 +25,51 @@ function main() {
 	// Width = 256
 	// Height = 224
 	// FPS = 60
-	startingScene = new PlayScene(LevelStore.GetLevel("lightworld"));
+
+	window = new GameWindow("Zelda Clone", 60, 256, 224, 512, 448);
+	activeScene = new PlayScene(LevelStore.GetLevel("lightworld"));
+	
+	events = [];
+	counter = 0;
+	while (true) {
+		for (e : window.pumpEvents()) {
+			switch (e.type) {
+				case EventType.QUIT:
+					return;
+
+				case EventType.KEY_DOWN:
+				case EventType.KEY_UP:
+					isDown = e.type == EventType.KEY_DOWN;
+					action = null;
+					switch (e.key) {
+						case KeyboardKey.UP: action = "up"; break;
+						case KeyboardKey.DOWN: action = "down"; break;
+						case KeyboardKey.LEFT: action = "left"; break;
+						case KeyboardKey.RIGHT: action = "right"; break;
+						case KeyboardKey.ENTER: action = "start"; break;
+						default:
+							break;
+					}
+					if (action != null) {
+						events.add(new InputEvent(action, isDown));
+						InputManager.pressedKeys[action] = isDown;
+					}
+					break;
+			}
+		}
+
+		activeScene.ProcessInput(events);
+		events.clear();
+		activeScene.Update(counter++);
+		activeScene.Render();
+
+		if (activeScene._nextScene != null) {
+			next = activeScene._nextScene;
+			activeScene._nextScene = null;
+			activeScene = next;
+		}
+
+		window.clockTick();
+	}
 	throw new NotImplementedException();
 }

@@ -1,0 +1,9 @@
+class Image {
+	
+	field width;
+	field height;
+
+	constructor(fileOrWidth, height = null) {
+		throw new NotImplementedException();
+	}
+}
