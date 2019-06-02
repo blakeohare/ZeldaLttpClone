@@ -1,87 +1,69 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using GameLight.Graphics;
-using GameLight.Input;
-using GameLight.Scene;
-using GameLight.Sound;
-using Zelda.Map;
+﻿// TODO: put this in a separate file
+class Point {
+	field X;
+	field Y;
+	constructor(x, y) {
+		this.X = x;
+		this.Y = y;
+	}
+}
 
-namespace Zelda.Sprites
+// abstract
+class Sprite
 {
-	public abstract class Sprite
+	// doubles
+	field X;
+	field Y;
+	field DX;
+	field DY;
+	field CollisionRadius;
+
+	field direction; // Direction enum
+	
+	static field directions = {
+		Direction.Left: "left",
+		Direction.Up: "up",
+		Direction.Right: "right",
+		Direction.Down: "down",
+	};
+
+	function GetDirectionString() { return Sprite.directions[this.direction]; }
+
+	function GetRenderLeft() { return Math.floor(this.X + this.renderOffset.X); }
+	function GetRenderTop() { return Math.floor(this.Y + this.renderOffset.Y); }
+	function GetWidth() { return Math.floor(this.CollisionRadius * 2); }
+	function GetHeight() { return (int)(this.CollisionRadius * 2); }
+
+	field level;
+	field layer;
+
+	constructor(x, y, radius, level, layer)
 	{
-		public double X { get; set; }
-		public double Y { get; set; }
-		public double DX { get; set; }
-		public double DY { get; set; }
-		public double CollisionRadius { get; set; }
+		this.CollisionRadius = radius;
+		this.X = x;
+		this.Y = y;
+		this.renderOffset = new Point(-radius, -radius);
+		this.level = level;
+		this.layer = layer;
+	}
 
-		protected Direction direction;
-		public Direction Direction { get { return this.direction; } }
-		
-		private static readonly Dictionary<Direction, string> directions = new Dictionary<Direction,string>()
-		{
-			{ Direction.Left, "left" },
-			{ Direction.Up, "up" },
-			{ Direction.Right, "right" },
-			{ Direction.Down, "down" }
-		};
+	function Update() { throw new NotImplementedException(); }
+	function Render(cameraOffsetX, cameraOffsetY) { throw new NotImplementedException(); }
 
-		public string DirectionString { get { return directions[this.direction]; } }
+	field renderOffset;
 
+	function MoveRequest() {
+		x = this.X + this.DX;
+		y = this.Y + this.DY;
 
+		left = (int)(x - this.CollisionRadius);
+		top = (int)(y - this.CollisionRadius);
+		right = left + (int)(this.CollisionRadius * 2);
+		bottom = top + (int)(this.CollisionRadius * 2);
 
-		public int RenderLeft { get { return (int)(this.X + this.renderOffset.X); } }
-		public int RenderTop { get { return (int)(this.Y + this.renderOffset.Y); } }
-		public int Width { get { return (int)(this.CollisionRadius * 2); } }
-		public int Height { get { return (int)(this.CollisionRadius * 2); } }
-		public Layer Layer
-		{
-			get { return this.layer; }
-			set { this.layer = value; }
-		}
-
-		private Level level;
-		private Layer layer;
-
-		public Sprite(double x, double y, double radius, Level level, Layer layer)
-		{
-			this.CollisionRadius = radius;
+		if (this.layer.IsRectangleFree(left, top, right, bottom)) {
 			this.X = x;
 			this.Y = y;
-			this.renderOffset = new Point(-radius, -radius);
-			this.level = level;
-			this.layer = layer;
-		}
-
-		public abstract void Update();
-		public abstract void Render(Image screen, int cameraOffsetX, int cameraOffsetY);
-
-		private Point renderOffset;
-		public virtual Point RenderOffset
-		{
-			get
-			{
-				return this.renderOffset;
-			}
-		}
-
-		public void MoveRequest()
-		{
-			double x = this.X + this.DX;
-			double y = this.Y + this.DY;
-
-			int left = (int)(x - this.CollisionRadius);
-			int top = (int)(y - this.CollisionRadius);
-			int right = left + (int)(this.CollisionRadius * 2);
-			int bottom = top + (int)(this.CollisionRadius * 2);
-
-			if (this.layer.IsRectangleFree(left, top, right, bottom))
-			{
-				this.X = x;
-				this.Y = y;
-			}
 		}
 	}
 }
