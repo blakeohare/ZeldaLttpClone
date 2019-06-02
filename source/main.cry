@@ -27,7 +27,7 @@ function main() {
 	// FPS = 60
 
 	window = new GameWindow("Zelda Clone", 60, 256, 224, 512, 448);
-	activeScene = new PlayScene(LevelStore.GetLevel("lightworld"));
+	activeScene = new ImageLoaderScene(() => { return new PlayScene(LevelStore.GetLevel("lightworld")); });
 	
 	events = [];
 	counter = 0;

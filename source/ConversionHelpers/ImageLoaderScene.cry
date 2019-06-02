@@ -1,0 +1,26 @@
+import ImageResources;
+
+class ImageLoaderScene : GameSceneBase {
+	
+	field imageSheet = null;
+	field initialSceneLoader = null;
+	
+	constructor(initialSceneLoader) {
+		this.initialSceneLoader = initialSceneLoader;
+		this.imageSheet = ImageSheet.loadFromResourcesAsync('everything');
+	}
+	
+	function ProcessInput(events) { }
+	
+	function Update(counter) {
+		print(counter);
+		if (this.imageSheet.isDone()) {
+			Image.sheet = this.imageSheet;
+			this.SwitchToScene(this.initialSceneLoader());
+		}
+	}
+	
+	function Render() {
+		
+	}
+}

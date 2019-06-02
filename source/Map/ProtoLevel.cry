@@ -11,13 +11,13 @@ public class ProtoLevel {
 		lines = t.trim().split('\n');
 
 		for (line : lines) {
-			formatted = line.Trim();
-			if (formatted.length == 0 || formatted[0] == '#') {
-					continue;
+			formatted = line.trim();
+			if (formatted.length == 0) {
+				continue;
 			}
 			
 			parts = formatted.split(':');
-			if (parts.Length > 1) {
+			if (parts.length > 1) {
 				key = parts[0][1:];
 				if (key.length > 0) {
 					values[key] = parts[1:].join(':').trim();
@@ -42,15 +42,15 @@ public class ProtoLevel {
 					index = y * width + x;
 					templateIds = tileIdClumps[index].split('|');
 					// TODO: C#-ism
-					tile = [null] * templateIds.Length;
-					for (i = 0; i < templateIds.Length; ++i) {
+					tile = [null] * templateIds.length;
+					for (i = 0; i < templateIds.length; ++i) {
 						tile[i] = tileFactory.GetTemplate(templateIds[i]);
 					}
 					tiles.add(tile);
 				}
 			}
 
-			this.layers.Add(tiles);
+			this.layers.add(tiles);
 
 			++layerNum;
 		}
