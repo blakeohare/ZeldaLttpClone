@@ -1,2 +1,3 @@
 # ZeldaLttpClone
-A clone of Legend of Zelda Link to the Past I started making in 2010 in Silverlight
+
+A clone of The Legend of Zelda: Link to the Past that I started making in 2010.
