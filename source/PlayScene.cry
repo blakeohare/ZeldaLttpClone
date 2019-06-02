@@ -8,6 +8,7 @@ class PlayScene : GameSceneBase {
 	constructor(level) {
 		this.level = level;
 		TextRenderer.PurgeCache();
+		this.link = new Link(1288, 220, this.level, this.level.layers[0]);
 	}
 
 	function GetCameraOffsetX() {
@@ -15,8 +16,8 @@ class PlayScene : GameSceneBase {
 			if (camOffsetX < 0) return 0;
 
 			// Is this off by 1? Go to the right edge of the map to find out.
-			if (camOffsetX >= this.level.Width * 16 - 256) {
-				return this.level.Width * 16 - 256;
+			if (camOffsetX >= this.level.width * 16 - 256) {
+				return this.level.width * 16 - 256;
 			}
 			
 			return camOffsetX;
@@ -27,15 +28,11 @@ class PlayScene : GameSceneBase {
 		if (camOffsetY < 0) return 0;
 
 		// Is this off by 1? Go to the bottom edge of the map to find out.
-		if (camOffsetY >= this.level.Height * 16 - 224) {
-			return this.level.Width * 16 - 224;
+		if (camOffsetY >= this.level.height * 16 - 224) {
+			return this.level.width * 16 - 224;
 		}
 
 		return camOffsetY;
-	}
-
-	function Initialize() {
-		this.link = new Link(1288, 220, this.level, this.level.Layers[0]);
 	}
 
 	function ProcessInput(events) {
@@ -70,13 +67,13 @@ class PlayScene : GameSceneBase {
 
 	function Render() {
 		// TODO: render other layers
-		this.RenderLayer(this.level.Layers[0]);
+		this.RenderLayer(this.level.layers[0]);
 		this.RenderOverlay();
 
 		++this.renderCounter;
 	}
 
-	field overlayBase = new Image("Images/overlay.png");
+	field overlayBase = new Image("Images/hud/overlay.png");
 	
 	function RenderOverlay() {
 
@@ -91,7 +88,7 @@ class PlayScene : GameSceneBase {
 		arrowCount.draw(121, 24 + top);
 	}
 
-	field canopy = new AggregatedImage(256, 224);
+	field canopy = new AggregatedImage(256, 224, true);
 
 	function RenderLayer(layer) {
 		this.canopy.clear();
@@ -110,10 +107,10 @@ class PlayScene : GameSceneBase {
 		bottom++;
 
 		left = left < 0 ? 0 : left;
-		right = right >= this.level.Width ? this.level.Width - 1 : right;
+		right = right >= this.level.width ? this.level.width - 1 : right;
 		top = top < 0 ? 0 : top;
-		bottom = bottom >= this.level.Height ? this.level.Height - 1 : bottom;
-		tiles = layer.Tiles;
+		bottom = bottom >= this.level.height ? this.level.height - 1 : bottom;
+		tiles = layer.tiles;
 		
 		canopyUsed = false;
 
@@ -132,7 +129,7 @@ class PlayScene : GameSceneBase {
 			}
 		}
 
-		if (this.link.Layer == layer) {
+		if (this.link.layer == layer) {
 			this.link.Render(camOffsetX, camOffsetY);
 		}
 

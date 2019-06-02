@@ -27,25 +27,28 @@ class AggregatedImage {
 
 	field width;
 	field height;
-
+	field cropSafe = false;
 	field blitImages = [];
 	field blitX = [];
 	field blitY = [];
-
-	constructor(width, height) {
+	field length = 0;
+	
+	constructor(width, height, cropSafe = false) {
 		this.width = width;
 		this.height = height;
+		this.cropSafe = cropSafe;
 	}
 
 	function Blit(otherImage, x, y) {
-		if (x < 0 || y < 0) {
-			throw new Exception(); // can't use AggregatedImage to crop
+		if (!this.cropSafe) {
+			if (x < 0 || y < 0) {
+				throw new Exception(); // can't use AggregatedImage to crop
+			}
+			if (x + otherImage.width > this.width ||
+				y + otherImage.height > this.height) {
+				throw new Exception(); // can't use AggregatedImage to crop
+			}
 		}
-		if (x + otherImage.width >= this.width ||
-			y + otherImage.height >= this.height) {
-			throw new Exception(); // can't use AggregatedImage to crop
-		}
-
 		if (otherImage is AggregatedImage) {
 			for (i = 0; i < otherImage.blitImages.length; ++i) {
 				this.blitImages.add(otherImage.blitImages[i]);
@@ -57,12 +60,20 @@ class AggregatedImage {
 			this.blitX.add(x);
 			this.blitY.add(y);
 		}
+		this.length = this.blitX.length;
 		return this;
+	}
+	
+	function draw(x, y) {
+		for (i = 0; i < this.length; ++i) {
+			this.blitImages[i].draw(this.blitX[i] + x, this.blitY[i] + y);
+		}
 	}
 
 	function clear() {
 		this.blitImages.clear();
 		this.blitX.clear();
 		this.blitY.clear();
+		this.length = 0;
 	}
 }

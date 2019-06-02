@@ -46,7 +46,7 @@ class Link : Sprite {
 		// TODO: C#-ism don't put strings together on the fly like this
 		switch (this.state) {
 			case State.Standing:
-				sid = SpriteImageFactory.GetImage("link " + this.GetDirectionString() + " 1");
+				sid = SpriteImageFactory.GetImage("link-" + this.GetDirectionString() + "-1");
 				break;
 
 			case State.Walking:
@@ -54,7 +54,7 @@ class Link : Sprite {
 				if (num == 1 || num == 3) num = 1;
 				else if (num == 2) num = 3;
 				else num = 2;
-				sid = SpriteImageFactory.GetImage("link " + this.GetDirectionString() + " " + num);
+				sid = SpriteImageFactory.GetImage("link-" + this.GetDirectionString() + "-" + num);
 				break;
 
 			default:

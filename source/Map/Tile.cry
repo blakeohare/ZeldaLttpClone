@@ -19,7 +19,7 @@ class Tile {
 	function InitializeBarriers() {
 		this.barriers = [];
 		for (template : this.templates) {
-			for (barrier : template.Barriers) {
+			for (barrier : template.barriers) {
 				this.barriers.add(barrier.Clone(this.col, this.row));
 			}
 		}
@@ -43,10 +43,10 @@ class Tile {
 		for (template : templates) {
 			this.templates.add(template);
 			animated = animated || template.IsAnimated;
-			this.hasCanopy = this.hasCanopy || template.IsCanopy;
+			this.hasCanopy = this.hasCanopy || template.isCanopy;
 		}
 
-		this.empty = this.templates.Count == 0;
+		this.empty = this.templates.length == 0;
 		if (!this.empty) {
 			this.flattenedImage = new AggregatedImage(16, 16);
 		}
@@ -79,7 +79,7 @@ class Tile {
 			if (this.canopyImage == null) {
 				this.canopyImage = new AggregatedImage(16, 16);
 				for (template : this.templates) {
-					if (template.IsCanopy) {
+					if (template.isCanopy) {
 						this.canopyImage.Blit(template.GetImage(renderCounter), 0, 0);
 					}
 				}

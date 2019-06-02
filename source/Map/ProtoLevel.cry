@@ -2,8 +2,8 @@
 
 public class ProtoLevel {
 	field layers = []; // each layer is a grid of tiles
-	field Width;
-	field Height;
+	field width;
+	field height;
 
 	constructor(levelName) {
 		values = {};
@@ -25,12 +25,12 @@ public class ProtoLevel {
 			}
 		}
 
-		this.Width = parseInt(values["width"]);
-		this.Height = parseInt(values["height"]);
+		this.width = parseInt(values["width"]);
+		this.height = parseInt(values["height"]);
 
 		layerNum = 1;
-		width = this.Width;
-		height = this.Height;
+		width = this.width;
+		height = this.height;
 		tileFactory = TileFactory.Instance;
 		
 		while (values.get("layer" + layerNum) != null) {
@@ -59,9 +59,9 @@ public class ProtoLevel {
 	function GenerateNewLevel() {
 		layers = [];
 		for (protoLayer : this.layers) {
-			tiles = makeGrid(this.Width, this.Height);
-			width = this.Width;
-			height = this.Height;
+			tiles = makeGrid(this.width, this.height);
+			width = this.width;
+			height = this.height;
 
 			for (y = 0; y < height; ++y) {
 				for (x = 0; x < width; ++x) {
@@ -69,7 +69,7 @@ public class ProtoLevel {
 					tiles[x][y] = new Tile(x, y, protoLayer[index]);
 				}
 			}
-			layers.add(new Layer(this.Width, this.Height, tiles));
+			layers.add(new Layer(this.width, this.height, tiles));
 		}
 
 		return new Level(layers);
