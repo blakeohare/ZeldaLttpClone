@@ -1,0 +1,12 @@
+link-right-1	0,-6
+link-left-2	0,-7
+link-down-1	0,-6
+link-down-3	0,-7
+link-up-2	0,-7
+link-up-1	0,-6
+link-left-3	0,-7
+link-right-2	0,-7
+link-right-3	0,-7
+link-down-2	0,-7
+link-up-3	0,-7
+link-left-1	0,-6
