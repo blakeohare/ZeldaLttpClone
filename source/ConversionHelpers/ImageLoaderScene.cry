@@ -13,7 +13,6 @@ class ImageLoaderScene : GameSceneBase {
 	function ProcessInput(events) { }
 	
 	function Update(counter) {
-		print(counter);
 		if (this.imageSheet.isDone()) {
 			Image.sheet = this.imageSheet;
 			this.SwitchToScene(this.initialSceneLoader());

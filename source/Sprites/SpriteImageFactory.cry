@@ -18,25 +18,17 @@ static class SpriteImageFactory {
 	static field images = {};
 
 	static constructor() {
-		lines = Resources.readText("Data/sprite_manifest.txt").split('\n');
+		lines = Resources.readText("Images/sprite_offsets.txt").split('\n');
 		// TODO: C#-ism: this is an atlas
-		canvas = new Image("Images/sprites.png");
-		sprite = null;
-
+		//canvas = new Image("Images/sprites.png");
+		
 		for (line : lines) {
-			trimmedLine = line.Trim();
+			trimmedLine = line.trim();
 			if (trimmedLine.length > 0) {
 				parts = trimmedLine.split('\t');
 				id = parts[0];
-				location = parts[1].split(',');
-				locX = parseInt(location[0]);
-				locY = parseInt(location[1]);
-				size = parts[2].split(',');
-				width = parseInt(size[0]);
-				height = parseInt(size[1]);
-
-				if (parts.length > 3) {
-					offsets = parts[3].split(',');
+				if (parts.length > 1) {
+					offsets = parts[1].split(',');
 					offsetX = parseInt(offsets[0]);
 					offsetY = parseInt(offsets[1]);
 				} else {
@@ -44,9 +36,8 @@ static class SpriteImageFactory {
 					offsetY = 0;
 				}
 
-				sprite = new AggregatedImage(width, height);
-				sprite.Blit(canvas, -locX, -locY);
-				SpriteImageFactory.images.add(id, new SpriteImageData(sprite, offsetX, offsetY));
+				sprite = new Image('Images/sprites/' + id + '.png');
+				SpriteImageFactory.images[id] = new SpriteImageData(sprite, offsetX, offsetY);
 			}
 		}
 	}
