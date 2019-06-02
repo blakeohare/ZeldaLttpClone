@@ -6,7 +6,7 @@ class Tile
 	field barriers = null; // Barrier[], lazily initialized
 	field empty; // bool
 	field animated; // bool
-	field flattenedImage = new Image(16, 16);
+	field flattenedImage = new AggregatedImage(16, 16);
 	field col; // int
 	field row; // int
 	field physics; // PhysicsTypes[]
@@ -53,7 +53,7 @@ class Tile
 
 		this.empty = this.templates.Count == 0;
 		if (!this.empty) {
-			this.flattenedImage = new Image(16, 16);
+			this.flattenedImage = new AggregatedImage(16, 16);
 		}
 		this.animated = animated;
 		if (!this.animated)
@@ -87,7 +87,7 @@ class Tile
 	function GetCanopyImage(renderCounter) {
 		if (this.hasCanopy) {
 			if (this.canopyImage == null) {
-				this.canopyImage = new Image(16, 16);
+				this.canopyImage = new AggregatedImage(16, 16);
 				for (template : this.templates) {
 					if (template.IsCanopy) {
 						this.canopyImage.Blit(template.GetImage(renderCounter), 0, 0);
