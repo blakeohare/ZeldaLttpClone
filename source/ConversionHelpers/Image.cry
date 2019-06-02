@@ -1,9 +1,10 @@
-
+import Graphics2D;
 
 class Image {
 	
 	static field images = {};
 	static field sheet = null;
+	
 	field width;
 	field height;
 	field g2dImg = null;
@@ -12,8 +13,8 @@ class Image {
 	constructor(path) {
 		this.g2dImg = Image.images.get(path);
 		if (this.g2dImg == null) {
-			imgRes = sheet.getImage(path);
-			this.g2dImg = Graphics2D.GraphicsText.load(imgRes);
+			imgRes = Image.sheet.getImage(path);
+			this.g2dImg = Graphics2D.GraphicsTexture.load(imgRes);
 			Image.images[path] = this.g2dImg;
 		}
 		this.width = this.g2dImg.width;
@@ -59,4 +60,9 @@ class AggregatedImage {
 		return this;
 	}
 
+	function clear() {
+		this.blitImages.clear();
+		this.blitX.clear();
+		this.blitY.clear();
+	}
 }

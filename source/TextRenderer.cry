@@ -5,7 +5,7 @@
 
 	static constructor() {
 		for (i = 0; i < 10; ++i) {
-			overlayNumbers[i.ToString()] = new Image("Images/Text/Overlay/" + i.ToString() + ".png");
+			TextRenderer.overlayNumbers[i.ToString()] = new Image("Images/Text/Overlay/" + i.ToString() + ".png");
 		}
 	}
 
@@ -14,21 +14,21 @@
 		key = "o_" + number + "_" + digits;
 		output = TextRenderer.cache.get(key);
 		if (output == null) {
-			digitWidth = overlayNumbers["0"].Width + 1;
+			digitWidth = TextRenderer.overlayNumbers["0"].Width + 1;
 			width = digitWidth * digits;
-			height = overlayNumbers["0"].Height;
+			height = TextRenderer.overlayNumbers["0"].Height;
 			numAsString = "" + number;
-			output = new Image(width, height);
+			output = new AggregatedImage(width, height);
 
 			while (numAsString.length < digits) {
 				numAsString = "0" + numAsString;
 			}
 
 			for (i = 0; i < numAsString.length; ++i) {
-				output.Blit(overlayNumbers[numAsString[i].ToString()], i * digitWidth, 0);
+				output.Blit(TextRenderer.overlayNumbers[numAsString[i].ToString()], i * digitWidth, 0);
 			}
 
-			cache[key] = output;
+			TextRenderer.cache[key] = output;
 		}
 		return output;
 	}

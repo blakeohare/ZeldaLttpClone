@@ -30,8 +30,8 @@ class InventoryScreen : GameSceneBase {
 		}
 	}
 
-	function Render(gameScreen) {
-		this.underlay.PublicRender(gameScreen);
+	function Render() {
+		this.underlay.Render();
 		InventoryScreen.frame.draw(0, this.transitionCounter);
 	}
 
