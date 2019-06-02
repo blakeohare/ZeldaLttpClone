@@ -47,21 +47,14 @@
 			// if the rectangular regions overlap and this isn't a diagonal, we have a collision
 			return true;
 		} else {
-			if (this.TopLeftOpen)
-			{
+			if (this.TopLeftOpen) {
 				// TODO: the rest of these...
 				return false;
-			}
-			else if (this.TopRightOpen)
-			{
+			} else if (this.TopRightOpen) {
 				return false;
-			}
-			else if (this.BottomLeftOpen)
-			{
+			} else if (this.BottomLeftOpen) {
 				return false;
-			}
-			else
-			{
+			} else {
 				return false;
 			}
 		}

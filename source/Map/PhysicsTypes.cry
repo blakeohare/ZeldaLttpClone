@@ -1,5 +1,4 @@
-﻿enum PhysicsTypes
-{
+﻿enum PhysicsTypes {
 	Ground,
 	ShortBlocking,
 	TallBlocking,

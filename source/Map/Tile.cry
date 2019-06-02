@@ -1,6 +1,5 @@
 ﻿
-class Tile
-{
+class Tile {
 	field templates = []; // List<TileTemplate>
 
 	field barriers = null; // Barrier[], lazily initialized
@@ -26,22 +25,18 @@ class Tile
 		}
 	}
 	
-	function IsCollisionWithRectangle(left, top, right, bottom)
-	{
+	function IsCollisionWithRectangle(left, top, right, bottom) {
 		if (this.barriers == null) this.InitializeBarriers();
 
-		for (barrier : this.barriers)
-		{
-			if (barrier.IntersectsRectangle(left, top, right, bottom))
-			{
+		for (barrier : this.barriers) {
+			if (barrier.IntersectsRectangle(left, top, right, bottom)) {
 				return true;
 			}
 		}
 		return false;
 	}
 
-	function Initialize(templates)
-	{
+	function Initialize(templates) {
 		this.physics = [PhysicsTypes.Ground, PhysicsTypes.Ground, PhysicsTypes.Ground, PhysicsTypes.Ground ];
 
 		animated = false;
@@ -56,21 +51,16 @@ class Tile
 			this.flattenedImage = new AggregatedImage(16, 16);
 		}
 		this.animated = animated;
-		if (!this.animated)
-		{
-			for (template : this.templates)
-			{
+		if (!this.animated) {
+			for (template : this.templates) {
 				this.flattenedImage.Blit(template.GetImage(0), 0, 0);
 			}
 		}
 	}
 
-	function GetImage(renderCounter)
-	{
-		if (this.animated)
-		{
-			for (template : this.templates)
-			{
+	function GetImage(renderCounter) {
+		if (this.animated) {
+			for (template : this.templates) {
 				this.flattenedImage.Blit(template.GetImage(renderCounter), 0, 0);
 			}
 		}

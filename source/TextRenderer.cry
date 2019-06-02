@@ -3,21 +3,17 @@
 
 	static field cache = {};
 
-	static constructor()
-	{
-		for (i = 0; i < 10; ++i)
-		{
+	static constructor() {
+		for (i = 0; i < 10; ++i) {
 			overlayNumbers[i.ToString()] = new Image("Images/Text/Overlay/" + i.ToString() + ".png");
 		}
 	}
 
 	// TODO: C#-ism: Replace the calling site with a simple call to draw directly to the canvas.
-	static function GetOverlayNumber(number, digits)
-	{
+	static function GetOverlayNumber(number, digits) {
 		key = "o_" + number + "_" + digits;
 		output = TextRenderer.cache.get(key);
-		if (output == null)
-		{
+		if (output == null) {
 			digitWidth = overlayNumbers["0"].Width + 1;
 			width = digitWidth * digits;
 			height = overlayNumbers["0"].Height;
@@ -28,8 +24,7 @@
 				numAsString = "0" + numAsString;
 			}
 
-			for (i = 0; i < numAsString.length; ++i)
-			{
+			for (i = 0; i < numAsString.length; ++i) {
 				output.Blit(overlayNumbers[numAsString[i].ToString()], i * digitWidth, 0);
 			}
 
@@ -38,8 +33,7 @@
 		return output;
 	}
 
-	static function PurgeCache()
-	{
+	static function PurgeCache() {
 		TextRenderer.cache.clear();
 	}
 }

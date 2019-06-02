@@ -10,8 +10,7 @@
 
 	field isCanopy = false;
 	
-	constructor(id, images, physics, specialCodes)
-	{
+	constructor(id, images, physics, specialCodes) {
 		this.ID = id;
 		this.images = images;
 		this.numImages = images.Length;
@@ -22,12 +21,9 @@
 		this.InitializeFlags(specialCodes);
 	}
 
-	function InitializeFlags(codes)
-	{
-		for (code : codes)
-		{
-			switch (code)
-			{
+	function InitializeFlags(codes) {
+		for (code : codes) {
+			switch (code) {
 				case "canopy":
 					this.isCanopy = true;
 					break;
@@ -42,10 +38,8 @@
 		}
 	}
 
-	function GetBarrierList(physics, left, top, width, height)
-	{
-		switch (physics)
-		{
+	function GetBarrierList(physics, left, top, width, height) {
+		switch (physics) {
 			case "g":
 				return [];
 
@@ -92,8 +86,7 @@
 
 	// Special codes are used for identifying tile templates as having 
 	// certain properties. Such as foliage that can be chopped away. 
-	function ContainsSpecialTile(code)
-	{
+	function ContainsSpecialTile(code) {
 		return this.specialCodes.contains(code);
 	}
 }

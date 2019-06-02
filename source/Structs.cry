@@ -3,8 +3,7 @@
 	field X = 0.0;
 	field Y = 0.0;
 
-	constructor(x, y)
-	{
+	constructor(x, y) {
 		this.X = x;
 		this.Y = y;
 	}

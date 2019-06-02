@@ -1,7 +1,6 @@
 ﻿import Math;
 
-enum InventoryTransitionState
-{
+enum InventoryTransitionState {
 	TransitionIn,
 	TransitionOut,
 	Normal
@@ -36,10 +35,8 @@ class InventoryScreen : GameSceneBase {
 		InventoryScreen.frame.draw(0, this.transitionCounter);
 	}
 
-	function Update(gameCounter)
-	{
-		switch (this.transitionState)
-		{
+	function Update(gameCounter) {
+		switch (this.transitionState) {
 			case InventoryTransitionState.Normal:
 				this.transitionCounter = 0;
 				break;

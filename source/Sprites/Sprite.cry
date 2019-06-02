@@ -1,7 +1,6 @@
 ﻿import Math;
 
-class Sprite // abstract
-{
+class Sprite {
 	// doubles
 	field X;
 	field Y;
@@ -28,8 +27,7 @@ class Sprite // abstract
 	field level;
 	field layer;
 
-	constructor(x, y, radius, level, layer)
-	{
+	constructor(x, y, radius, level, layer) {
 		this.CollisionRadius = radius;
 		this.X = x;
 		this.Y = y;

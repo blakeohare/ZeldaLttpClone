@@ -15,8 +15,7 @@ class GameState {
 	function GetStringValue(key) { return this.stringValues.get(key, ""); }
 	function GetBoolValue(key) { return this.intValues.get(key) == 1; }
 
-	function SetValue(key, value)
-	{
+	function SetValue(key, value) {
 		switch (typeof(value)) {
 			case Type.INTEGER: this.intValues[key] = value; break;
 			case Type.STRING: this.stringValues[key] = value; break;
@@ -46,8 +45,7 @@ class GameState {
 	function setSilverArrows(value) { this.SetValue("has_silver_arrows", value == true); }
 
 	// TODO: C#-ism: this is built into the Math library
-	function EnsureRange(value, minimum, maximum)
-	{
+	function EnsureRange(value, minimum, maximum) {
 		if (value < minimum) return minimum;
 		if (value > maximum) return maximum;
 		return value;

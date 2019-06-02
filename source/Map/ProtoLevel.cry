@@ -1,13 +1,11 @@
 ﻿import Resources;
 
-public class ProtoLevel
-{
+public class ProtoLevel {
 	field layers = []; // each layer is a grid of tiles
 	field Width;
 	field Height;
 
-	constructor(levelName)
-	{
+	constructor(levelName) {
 		values = {};
 		t = Resources.readText("Data/Maps/" + levelName + ".txt");
 		lines = t.trim().split('\n');
@@ -19,8 +17,7 @@ public class ProtoLevel
 			}
 			
 			parts = formatted.split(':');
-			if (parts.Length > 1)
-			{
+			if (parts.Length > 1) {
 				key = parts[0][1:];
 				if (key.length > 0) {
 					values[key] = parts[1:].join(':').trim();
@@ -36,21 +33,17 @@ public class ProtoLevel
 		height = this.Height;
 		tileFactory = TileFactory.Instance;
 		
-		while (values.get("layer" + layerNum) != null)
-		{
+		while (values.get("layer" + layerNum) != null) {
 			tiles = [];
 			tileIdClumps = values["layer" + layerNum].split(',');
 
-			for (y = 0; y < height; ++y)
-			{
-				for (x = 0; x < width; ++x)
-				{
+			for (y = 0; y < height; ++y) {
+				for (x = 0; x < width; ++x) {
 					index = y * width + x;
 					templateIds = tileIdClumps[index].split('|');
 					// TODO: C#-ism
 					tile = [null] * templateIds.Length;
-					for (i = 0; i < templateIds.Length; ++i)
-					{
+					for (i = 0; i < templateIds.Length; ++i) {
 						tile[i] = tileFactory.GetTemplate(templateIds[i]);
 					}
 					tiles.add(tile);
