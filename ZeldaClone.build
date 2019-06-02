@@ -1,0 +1,45 @@
+﻿{
+    "id": "ZeldaClone",
+    "source": "source/",
+    "output": "output/%TARGET_NAME%",
+    "title": "ZeldaClone",
+    "icons": [
+        "assets/icon32.png",
+        "assets/icon256.png"
+    ],
+    "version": "1.0",
+    "ios-bundle-prefix": "com.blakeohare.ZeldaClone,%VERSION%",
+    "guid-seed": "com.blakeohare.ZeldaClone,v1,%TARGET_NAME%",
+
+    "image-sheets": [
+        { "id": "everything", "prefix": "*" }
+    ],
+
+    "targets": [
+        {
+            "name": "android",
+            "platform": "javascript-app-android"
+        },
+        {
+            "name": "ios",
+            "platform": "javascript-app-ios"
+        },
+        {
+            "name": "javascript",
+            "platform": "javascript-app",
+            "js-file-prefix": "/website/relative/path/from/domain/root"
+        },
+        {
+            "name": "csharp",
+            "platform": "csharp-app"
+        },
+        {
+            "name": "java",
+            "platform": "java-app"
+        },
+        {
+            "name": "python",
+            "platform": "python-app"
+        }
+    ]
+}
