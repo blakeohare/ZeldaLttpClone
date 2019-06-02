@@ -24,7 +24,7 @@ class PlayScene : GameSceneBase
 			return camOffsetX;
 	}
 
-	function CameraOffsetY()
+	function GetCameraOffsetY()
 	{
 		camOffsetY = Math.floor(this.link.Y - 112);
 		if (camOffsetY < 0) return 0;
@@ -45,19 +45,17 @@ class PlayScene : GameSceneBase
 		dx = 0.0;
 		dy = 0.0;
 
-		if (InputManager.IsKeyPressed(Key.Up)) dy = -1;
-		if (InputManager.IsKeyPressed(Key.Down)) dy = 1;
-		if (InputManager.IsKeyPressed(Key.Right)) dx = 1;
-		if (InputManager.IsKeyPressed(Key.Left)) dx = -1;
+		if (InputManager.IsKeyPressed("up")) dy = -1;
+		if (InputManager.IsKeyPressed("down")) dy = 1;
+		if (InputManager.IsKeyPressed("right")) dx = 1;
+		if (InputManager.IsKeyPressed("left")) dx = -1;
 
 		this.link.SetWalkingDirection(dx * 1.7, dy * 1.7);
 
 		for (e : events) {
-			if (e.Type == EventType.KeyDown) {
-				if (e.Key == Key.Enter) {
-					inventory = new InventoryScreen(this);
-					this.SwitchToScene(inventory);
-				}
+			if (e.action == "start" && e.down) {
+				inventory = new InventoryScreen(this);
+				this.SwitchToScene(inventory);
 			}
 		}
 	}
@@ -73,8 +71,6 @@ class PlayScene : GameSceneBase
 		this.underlayOffset = transitionOffset;
 	}
 
-	function PublicRender(gameScreen) { this.Render(gameScreen); }
-
 	function Render(gameScreen) {
 		// TODO: render other layers
 		this.RenderLayer(this.level.Layers[0], gameScreen);
@@ -84,12 +80,13 @@ class PlayScene : GameSceneBase
 	}
 
 	field overlayBase = new Image("Images/overlay.png");
+	
 	function RenderOverlay() {
 		top = 224 + this.underlayOffset;
-		overlayBase.draw(12, top);
-		rupeeCount = TextRenderer.GetOverlayNumber(GameState.Instance.Rupees, 3);
-		bombCount = TextRenderer.GetOverlayNumber(GameState.Instance.Bombs, 2);
-		arrowCount = TextRenderer.GetOverlayNumber(GameState.Instance.Arrows, 2);
+		this.overlayBase.draw(12, top);
+		rupeeCount = TextRenderer.GetOverlayNumber(GameState.Instance.getRupees(), 3);
+		bombCount = TextRenderer.GetOverlayNumber(GameState.Instance.getBombs(), 2);
+		arrowCount = TextRenderer.GetOverlayNumber(GameState.Instance.getArrows(), 2);
 		
 		rupeeCount.draw(65, 24 + top);
 		bombCount.draw(97, 24 + top);
@@ -102,8 +99,8 @@ class PlayScene : GameSceneBase
 	{
 		this.canopy.Fill(Colors.Transparent);
 
-		camOffsetX = this.CameraOffsetX;
-		camOffsetY = this.CameraOffsetY;
+		camOffsetX = this.GetCameraOffsetX();
+		camOffsetY = this.GetCameraOffsetY();
 
 		left = camOffsetX / 16;
 		right = left + 17;

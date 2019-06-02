@@ -25,17 +25,15 @@ class InventoryScreen : GameSceneBase {
 	// This is an InputEvent[] from GameLight
 	function ProcessInput(events) {
 		for (e : events) {
-			if (e.Type == EventType.KeyDown) {
-				if (e.Key == Key.Enter) {
-					this.transitionState = InventoryTransitionState.TransitionOut;
-				}
+			if (e.action == "start" && e.down) {
+				this.transitionState = InventoryTransitionState.TransitionOut;
 			}
 		}
 	}
 
 	function Render(gameScreen) {
 		this.underlay.PublicRender(gameScreen);
-		frame.draw(0, this.transitionCounter);
+		InventoryScreen.frame.draw(0, this.transitionCounter);
 	}
 
 	function Update(gameCounter)

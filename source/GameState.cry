@@ -32,7 +32,7 @@ class GameState {
 		value = this.EnsureRange(value, 0, this.getHeartContainers() * 2);
 		this.SetValue("life", value);
 	}
-	function getHeartContains() { return this.GetIntValues("heart_containers"); }
+	function getHeartContainers() { return this.GetIntValue("heart_containers"); }
 	function setHeartContainers(value) { this.SetValue("heart_containers", value); }
 	function getBombs() { return this.GetIntValue("bombs"); }
 	function setBombs(value) { this.SetValue("bombs", this.EnsureRange(value, 0, this.getMaxBombs())); }

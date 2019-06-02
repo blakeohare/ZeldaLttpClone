@@ -1,4 +1,5 @@
-﻿
+﻿import Resources;
+
 public class ProtoLevel
 {
 	field layers = []; // each layer is a grid of tiles
@@ -8,7 +9,7 @@ public class ProtoLevel
 	constructor(levelName)
 	{
 		values = {};
-		t = Resources.readTextResource("Data/Maps/" + levelName + ".txt");
+		t = Resources.readText("Data/Maps/" + levelName + ".txt");
 		lines = t.trim().split('\n');
 
 		for (line : lines) {

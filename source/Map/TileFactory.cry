@@ -1,4 +1,6 @@
-﻿class TileFactory {
+﻿import Resources;
+
+class TileFactory {
 	
 	static field Instance;
 	
@@ -14,7 +16,7 @@
 	}
 
 	function InitializeTileImages() {
-		lines = Resources.readResourceText("Zelda.Data.tile_manifest.txt").trim().split('\n');
+		lines = Resources.readText("Zelda.Data.tile_manifest.txt").trim().split('\n');
 		
 		// TODO: C#-ism
 		// Since you can't do an image atlas yourself, this will need to be re-done.
@@ -51,13 +53,13 @@
 
 	function GetTemplate(id) {
 		// I want unknown ID's to throw
-		return templates[id];
+		return this.templates[id];
 	}
 
 	function GenerateTile(col, row, ids) {
 		tt = [];
 		for (i = 0; i < ids.length; ++i) {
-			tt.add(tempaltes[ids[i]]);
+			tt.add(this.templates[ids[i]]);
 		}
 
 		return new Tile(col, row, tt);

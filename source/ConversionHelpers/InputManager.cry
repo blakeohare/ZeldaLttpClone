@@ -1,0 +1,7 @@
+static class InputManager {
+	static field pressedKeys = {};
+
+	static function IsKeyPressed(action) {
+		return InputManager.pressedKeys.get(action, false);
+	}
+}

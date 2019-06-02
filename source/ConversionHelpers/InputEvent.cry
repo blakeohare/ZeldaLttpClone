@@ -1,0 +1,10 @@
+class InputEvent {
+
+	field action; // string, but should be a enum
+	field down; // bool
+
+	constructor(action, down) {
+		this.action = action + "";
+		this.down = down == true;
+	}
+}
