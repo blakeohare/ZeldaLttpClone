@@ -79,9 +79,10 @@ class PlayScene : GameSceneBase
 		++this.renderCounter;
 	}
 
-	field overlayBase = new Image("Images/overlay.png");
-	
+	field overlayBaseImage = new Image("Images/overlay.png");
+	field overlayAggregated = null;
 	function RenderOverlay() {
+
 		top = 224 + this.underlayOffset;
 		this.overlayBase.draw(12, top);
 		rupeeCount = TextRenderer.GetOverlayNumber(GameState.Instance.getRupees(), 3);

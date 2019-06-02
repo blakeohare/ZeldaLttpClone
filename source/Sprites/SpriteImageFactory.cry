@@ -44,7 +44,7 @@ static class SpriteImageFactory {
 					offsetY = 0;
 				}
 
-				sprite = new Image(width, height);
+				sprite = new AggregatedImage(width, height);
 				sprite.Blit(canvas, -locX, -locY);
 				SpriteImageFactory.images.add(id, new SpriteImageData(sprite, offsetX, offsetY));
 			}
